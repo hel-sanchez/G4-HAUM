@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Inbox{% endblock title %}
+
+{% block content %}
+    <h1 class="mb-6 text-3xl">Inbox</h1>
+
+    <div class="space-y-6">
+
+        {% for conversation in conversations %}
+            <div class="p-6 flex bg-gray-100 rounded-xl">
+                <a href="{% url 'conversation:detail_conversation' conversation.id %}" style="flex-grow: 1; text-decoration: none; color: #333;">
+                    <div class="pr-6">
+                        <img src="{{ conversation.item.image.url }}" alt="" class="rounded-full w-14 h-14">
+                    </div>
+
+                    <div>
+                        {% if conversation.sender == request.user %}
+                            <p class="mb-4 font-bold"><strong>You</strong> | {{ conversation.modified_at }}</p>
+                        {% else %}
+                            <p class="mb-4 font-bold"><strong>{{ conversation.sender.username }}</strong> | {{ conversation.modified_at }}</p>
+                        {% endif %}
+                        <p>{{ conversation.item.name }}</p>
+                    </div>
+                </a>
+
+                <div style="flex-shrink: 0;">
+                    <form method="post" action="{% url 'conversation:delete_conversation' conversation.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-500">Soft Delete</button>
+                    </form>
+                </div>
+
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

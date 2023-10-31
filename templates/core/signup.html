@@ -1,0 +1,161 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Sign Up{% endblock title %}
+
+{% block content %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <div class="w-full md:w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+        <h1 class="text-2xl text-center font-bold py-2">Sign Up</h1>
+
+        <form method="post" action=".">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="block mb-2">Username</label>
+                {{ form.username }}
+                {{ form.username.errors }} <!-- Display username field errors -->
+            </div>
+
+            <div class="mb-3">
+                <label class="block mb-2">First Name</label>
+                {{ form.first_name }}
+                {{ form.first_name.errors }} <!-- Display firstname field errors -->
+            </div>
+
+            <div class="mb-3">
+                <label class="block mb-2">Last Name</label>
+                {{ form.last_name }}
+                {{ form.last_name.errors }} <!-- Display lastname field errors -->
+            </div>
+
+            <div class="mb-3">
+                <label class="block mb-2">Email</label>
+                {{ form.email }}
+                {{ form.email.errors }} <!-- Display email field errors -->
+            </div>
+
+            <div class="mb-3 position-relative">
+                <label class="block mb-2">Password</label>
+                <div class="input-group">
+                    <input class="w-full py-3 px-4 rounded-md" type="password" id="password" name="password1" placeholder="Password">
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-3">
+                        <button type="button" id="passwordToggle" class="hover:text-red-900">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </span>
+                </div>
+                <div class="mb-1 text-red-500 text-sm" id="passwordLengthMessage"></div>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <label class="block mb-2">Confirm Password</label>
+                <div class="input-group">
+                    <input class="w-full py-3 px-4 rounded-md" type="password" id="password2" name="password2" placeholder="Confirm Password">
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-3">
+                        <button type="button" id="passwordToggle2" class="hover:text-red-900">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </span>
+                </div>
+                <div class="mb-1 text-red-500 text-sm" id="passwordMatchMessage"></div>
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="mb-3 p-4 bg-red-100 rounded-xl text-sm text-red-900">
+                    {{ form.non_field_errors }} <!-- Display non-field errors -->
+                </div>
+            {% endif %}
+
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <button class="py-3 px-6 md:mr-2 text-base md:text-lg bg-red-800 hover:bg-red-950 rounded-md font-semibold text-white mb-4 md:mb-0">Submit</button>
+                <p class="text-gray-900 text-sm md:text-base">
+                    Already have an account?
+                    <a href="{% url 'login' %}" class="text-red-800 hover:underline mb-2 md:mb-0 md:ml-2 uppercase">
+                        Log in
+                    </a>
+                </p>
+            </div>
+        </form>
+    </div>
+
+    {# TOGGLE EYE #}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const passwordToggle = document.getElementById("passwordToggle");
+            const passwordToggle2 = document.getElementById("passwordToggle2");
+            const passwordInput = document.querySelector("#password");
+            const passwordInput2 = document.querySelector("#password2");
+            const eyeIcon = document.getElementById("eyeIcon");
+            const eyeIcon2 = document.getElementById("eyeIcon2");
+            const passwordLengthMessage = document.getElementById("passwordLengthMessage");
+            const passwordMatchMessage = document.getElementById("passwordMatchMessage");
+
+            passwordToggle.addEventListener("click", function () {
+                togglePasswordVisibility(passwordInput, eyeIcon);
+            });
+
+            passwordToggle2.addEventListener("click", function () {
+                togglePasswordVisibility(passwordInput2, eyeIcon2);
+            });
+
+            function togglePasswordVisibility(input, icon) {
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    input.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+
+                checkPasswordLength(input, passwordLengthMessage);
+                checkPasswordMatch(passwordInput, passwordInput2, passwordMatchMessage);
+            }
+
+            passwordInput.addEventListener("input", function () {
+                checkPasswordLength(passwordInput, passwordLengthMessage);
+                checkPasswordMatch(passwordInput, passwordInput2, passwordMatchMessage);
+            });
+
+            passwordInput2.addEventListener("input", function () {
+                checkPasswordMatch(passwordInput, passwordInput2, passwordMatchMessage);
+            });
+
+            function checkPasswordLength(input, messageElement) {
+                const minLength = 8;
+                const hasNumber = /\d{3}/.test(input.value);
+
+                if (input.value.length < minLength) {
+                    messageElement.textContent = `Password must be at least ${minLength} characters long.`;
+                } else if (!hasNumber) {
+                    messageElement.textContent = "Password must contain at least three numerical values.";
+                } else {
+                    messageElement.textContent = "";
+                }
+            }
+
+            function checkPasswordMatch(input1, input2, messageElement) {
+                if (input1.value !== input2.value) {
+                    messageElement.textContent = "Passwords do not match.";
+                } else {
+                    messageElement.textContent = "";
+                }
+            }
+        });
+    </script>
+
+    <style>
+        .input-group {
+            position: relative;
+        }
+
+        .input-group button {
+            position: absolute;
+            right: 21px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+{% endblock %}

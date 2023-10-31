@@ -1,0 +1,26 @@
+{% autoescape off %}
+    WELCOME TO OUR WEBSITE!
+
+    Hello, {{ user.username }}!
+
+    Thank you for registering on our website. Please click the button below to activate your account:
+
+
+
+    Link: http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+
+
+    If you did not request this activation link, please ignore this email.
+
+
+    Best Regards,
+    Your Website Team
+
+
+
+    Please note that this link will expire in 5 minutes.
+    If you don't confirm your registration within this time frame, you may need to request a new activation link.
+
+    This email was machine-generated. Please do not reply to this email.
+{% endautoescape %}

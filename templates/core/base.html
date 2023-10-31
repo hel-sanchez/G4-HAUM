@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/2b554022ef.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family={{ user.profile.font_preference }}" rel="stylesheet">
+    <link rel="icon" href="{% static 'haumlogo.png' %}">
+    <title>{% block title %}{% endblock title %} | HAUMarketplace</title>
+</head>
+
+<body>
+    <div style="font-family: {{ user.profile.font_preference }}">
+        <nav class="py-4 px-4 lg:py-6 lg:px-6 flex justify-between items-center border-b border-gray-200 bg-{{ user.profile.color }}">
+            <a href="/" class="text-xl lg:text-2xl font-bold" style="font: {{ user.profile.color }}; font-size: 30px">H A U M</a>
+
+            {% if request.user.is_authenticated %}
+                <button class="focus:outline-none lg:hidden text-lg text-white mr-5" onclick="toggleMobileNav()" style="color: black;">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div id="mobileNav" class="hidden lg:flex space-x-6 lg:mr-5">
+                    <div class="container-fluid text-center">
+                        <ul class="space-y-2 lg:flex lg:space-x-6">
+                            <li><a href="{% url 'item:new_item' %}"
+                                   class="text-lg lg:text-base font-semibold text-white rounded-md block py-3 lg:p-3 lg:text-xl lg:mt-2"
+                                   style="background: {{ user.profile.color }}">New Items</a></li>
+                            <li><a href="{% url 'item:items' %}"
+                                   class="text-lg lg:text-base font-semibold text-white rounded-md block py-3 lg:p-3 lg:text-xl"
+                                   style="background: {{ user.profile.color }}">Browse</a></li>
+
+                            <select onchange="window.location.href=this.value"
+                                    class="text-lg lg:text-base font-semibold text-white rounded-md py-3 lg:p-1 lg:text-xl"
+                                    style="background: {{ user.profile.color }}">
+                                <option value="" selected disabled class="text-center lg:text-center">More</option>
+                                <option value="{% url 'profile' request.user.username %}">&#128100; My Profile</option>
+                                <option value="{% url 'conversation:inbox' %}">&#9993; My Inbox</option>
+                                <option value="{% url 'dashboard:index_d' %}">&#128202; My Dashboard</option>
+                                <option value="{% url 'logout' %}">&#128682; Logout</option>
+                            </select>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </nav>
+
+        <div class="px-12 py-12">
+            {% block content %}{% endblock content %}
+        </div>
+
+        <footer class="py-6 px-6 lg:py-8 lg:px-8 flex justify-between bg-red-800 h-full w-full" style="background: {{ user.profile.color }};">
+            <div class="w-2/3 pr-4 lg:pr-10">
+                <h3 class="mb-3 lg:mb-5 text-lg lg:text-xl font-semibold text-white">About</h3>
+                <p class="text-white">HAUMarketplace is a platform for students to buy and sell items to each other.</p>
+            </div>
+
+            <div class="w-13">
+                <h3 class="mb-2 lg:mb-3 text-lg lg:text-xl font-semibold text-white">Menu</h3>
+
+                <ul class="space-y-2">
+                    <li><a href="{% url 'about' %}" class="text-lg lg:text-base text-white hover:text-teal-700">About</a></li>
+                    <li><a href="{% url 'contact' %}" class="text-lg lg:text-base text-white hover:text-teal-700">Contact</a></li>
+                    <li><a href="{% static 'static_root/privacy_policy/PrivacyPolicy_HAUM.pdf' %}" class="text-lg lg:text-base text-white hover:text-teal-700" target="_blank">Privacy policy</a></li>
+                    <li><a href="{% static 'static_root/terms_of_use/TermsofUse_HAUMarketplace.pdf' %}" class="text-lg lg:text-base text-white hover:text-teal-700" target="_blank">Term of use</a></li>
+                </ul>
+            </div>
+        </footer>
+
+        <script>
+            function toggleMobileNav() {
+                const mobileNav = document.getElementById('mobileNav');
+                mobileNav.classList.toggle('hidden');
+            }
+        </script>
+    </div>
+</body>
+
+</html>

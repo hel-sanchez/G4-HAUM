@@ -1,0 +1,119 @@
+{% extends 'core/base.html' %}
+
+{%  block title %}{{item.name}}{% endblock title %}
+
+{% block content %}
+    <div class ="grid grid-cols-5 gap-1">
+        <div class="col-span-3 flex items-center justify-center">
+            <img src="{{ item.image.url }}" class="rounded-xl">
+        </div>
+
+
+        <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
+            <div class="profile-container">
+                <a href="{% url 'profile' item.created_by %}">
+                <img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                     src="{{ item.created_by.profile.image.url }}" alt="Bordered avatar"
+                     style="border: 2px solid {{ item.created_by.profile.color }}"></a>
+                    <div class="user-tooltip">
+                        <p class="ml-2 text-sm"><strong>{{ item.created_by.username }}</strong></p>
+                        <p class="ml-2 text-sm">
+                            <strong>{{ item.created_by.profile.first_name }} {{ item.created_by.profile.last_name }}</strong>
+                        </p>
+                        <p class="ml-2 text-sm"><strong>{{ item.created_by.email }}</strong></p>
+                        <p class="ml-2 text-sm"><strong>Upvotes: {{ item.created_by.profile.upvotes }}</strong></p>
+                        <p class="ml-2 text-sm"><strong>Downvotes: {{ item.created_by.profile.downvotes }}</strong></p>
+                    </div>
+            </div>
+
+            <h2 class="mb-6 text-3xl">{{ item.name }}</h2>
+            <p class="text-black"><strong>Price:</strong>{{ item.price }}</p>
+            <p class="text-black"><strong>Seller:</strong>{{ item.created_by }}</p>
+            <p class="text-black"><strong>Category:</strong>{{ item.category }}</p>
+
+            {% if item.description %}
+                <p class="text-gray-700">
+                    <strong class ="text-black">Description:</strong><br>
+                    {{item.description }}
+                </p>
+            {% endif %}
+            {% if request.user == item.created_by %}
+                <div class ="mt-6 p-6 bg-white rounded-xl">
+                    <p>This is your item!</p>
+                    <a href ="{% url 'item:edit_item' item.id %}"
+                       class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-800 text-white rounded-xl hover:bg-teal-950">Edit</a>
+                    <a href ="{% url 'item:delete' item.id %}"
+                       class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-800 text-white rounded-xl hover:bg-red-950">Delete</a>
+                </div>
+
+            {% elif request.user.is_superuser %}
+                <div class ="mt-6 p-6 bg-white rounded-xl">
+                    <p>This is your item!</p>
+                    <a href ="{% url 'item:edit_item' item.id %}"
+                       class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-800 text-white rounded-xl hover:bg-teal-950">Edit</a>
+                    <a href ="{% url 'item:delete' item.id %}"
+                       class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-800 text-white rounded-xl hover:bg-red-950">Delete</a>
+                     <a href = "{% url 'conversation:new_conversation' item.id%}"
+                        class ="inline-block mt-6 px-6 py-3 text-lg font-semibold text-white rounded-xl hover:bg-red-950" style ="background: {{ user.profile.color }}">
+                        Contact Seller </a>
+                </div>
+
+
+            {% else %}
+            <a href = "{% url 'conversation:new_conversation' item.id%}"
+               class ="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-800 text-white rounded-xl hover:bg-red-950">
+                Contact Seller
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center uppercase font-bold">Related items</h2>
+
+        <div class="col-span-3 flex space-x-4" style="margin-right: 20px; margin-left: 20px">
+            <div class="grid grid-cols-3 gap-3">
+                {% for item in related_items %}
+                    <div class="flex">
+                        <a href="{% url 'item:detail' item.id %}">
+                            <div class="bg-white rounded-lg overflow-hidden shadow-md flex">
+                                <img src="{{ item.image.url }}" class="w-32 h-32 object-cover rounded-t-xl m-auto">
+                                <div class="p-4">
+                                    <h2 class="text-lg font-bold uppercase">{{ item.name }}</h2>
+                                    <p class="text-gray-500 text-sm">Price: {{ item.price }}</p>
+                                    <!-- You can customize the content here to match your "Newest items" section -->
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+    <style>
+        .profile-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-tooltip {
+            display: none;
+            position: absolute;
+            background-color: {{ user.profile.color }};
+            border: 3px solid #000000;
+            color: #fff;
+            padding: 10px;
+            z-index: 9999;
+            width: 300px;
+            top: 0;
+            right: 150%;
+        }
+
+        .profile-container:hover .user-tooltip {
+            display: block;
+        }
+    </style>
+
+{% endblock content %}

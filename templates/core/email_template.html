@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - HAU Marketplace</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+        .text-center {
+            text-align: center;
+        }
+        .contact-details {
+            margin-top: 20px;
+        }
+        .contact-details p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center font-bold">CONTACT US - RESPONSE</h1>
+        <div class="contact-details text-center">
+            <p><strong>Name:</strong> {{ name }}</p><br>
+            <p><strong>Email:</strong> {{ email }}</p><br>
+            <p><strong>Subject:</strong> {{ subject }}</p><br>
+            <p><strong>Comment:</strong><br> {{ comment }}</p><br><br><br><br>
+            <div class="mt-3 text-center text-gray-500">
+                PLEASE NOTE: You cannot reply to this e-mail as it is only a response message.
+                If you have any more concerns, please contact us using our website HAU Marketplace.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

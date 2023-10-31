@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+    <style>
+    /* Style for the error messages */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            color: #ff1818;
+        }
+
+        ul p {
+            color: #ff1818;
+        }
+    </style>
+
+<div class="max-w-xl mx-auto bg-white p-5 rounded-lg shadow-lg">
+    <h1 class="text-3xl font-semibold mb-6" style="text-align: center">{{ title }}</h1>
+
+    <form method="post" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="space-y-4">
+            {{ form.as_p }}
+        </div>
+
+        <!-- Displaying Error Messages -->
+        {% if form.errors %}
+            <ul>
+                {% for field in form %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <button class="mt-6 py-3 px-6 text-lg hover:bg-red-900 rounded-lg text-white"
+                style="background:{{ user.profile.color }}">Submit
+        </button>
+    </form>
+</div>
+{% endblock %}

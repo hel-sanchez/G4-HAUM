@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+{% block title %}Response - HAU Marketplace{% endblock %}
+
+{% block content %}
+        <div class="container-xxl mb-2">
+            <div class="col-md-6 flex items-center justify-center">
+                <div class="card shadow-lg w-80 text-center min-h-full">
+                    <div class="card-body p-5 text-center">
+                        <h2 class="mb-4 uppercase font-bold text-xl">Response</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="id_name" class="form-label uppercase font-bold">Name:</label>
+                                <input type="text" disabled name="name" id="id_name" class="form-control bg-white" value="{{ name }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_email" class="form-label uppercase font-bold">Email:</label>
+                                <input type="email" disabled name="email" id="id_email" class="form-control bg-white" value="{{ email }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_subject" class="form-label uppercase font-bold">Subject:</label>
+                                <input type="text" disabled name="subject" id="id_subject" class="form-control bg-white" value="{{ subject }}">
+                            </div>
+                            <div class="mb-4">
+                                <label for="id_message" class="form-label uppercase font-bold">Message</label>
+                                <textarea name="message" id="id_message" class="mt-2 form-control border border-black rounded-lg p-2 text-md" placeholder="Type here..." rows="4"></textarea>
+                            </div>
+                            <button class="uppercase font-bold px-2 py-3 text-white rounded-xl" type="submit" style="background: {{ user.profile.color }}">Submit</button>
+{#                            <p class="mt-3">#}
+{#                                Already have an account? <a href="{% url 'login' %}" class="uppercase font-bold text-red-800">lOG IN.</a>#}
+{#                            </p>#}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

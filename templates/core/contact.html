@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Contact Us - HAU Marketplace{% endblock %}
+
+{% block content %}
+    <div class="container mx-auto py-8 shadow-lg">
+        {% if user.is_superuser %}
+            <h1 class="text-3xl font-bold mb-4 uppercase text-center">Contact Messages</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for contact in contacts %}
+                    <div class="bg-white rounded-lg shadow-xl p-4">
+                        <p><strong>Name:</strong> {{ contact.name }}</p>
+                        <p><strong>Email:</strong> {{ contact.email }}</p>
+                        <p><strong>Subject:</strong> {{ contact.subject }}</p>
+                        <p><strong>Message:</strong> {{ contact.comment }}</p>
+                        <a href="{% url 'send_email' contact.subject contact.email contact.name %}">
+                            <button class="bg-red-800 hover:bg-red-900 text-white py-2 px-4 rounded-lg mt-2" style="background: {{ user.profile.color }}">Respond</button>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="flex justify-center items-center">
+                <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg border border-red-900">
+                    <h1 class="text-2xl font-bold mb-3 text-center">CONTACT US!</h1>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="name" class="block text-gray-600 text-md font-semibold">NAME</label>
+                            <input type="text" class="w-full py-2 px-3 border rounded-lg" id="name" name="name" placeholder="Name" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for "email" class="block text-gray-600 text-md font-semibold">EMAIL</label>
+                            <input type="email" class="w-full py-2 px-3 border rounded-lg" id="email" name="email" placeholder="Email" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="subject" class="block text-gray-600 text-md font-semibold">SUBJECT</label>
+                            <input type="text" class="w-full py-2 px-3 border rounded-lg" id="subject" name="subject" placeholder="Subject" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="comment" class="block text-gray-600 text-md font-semibold">LEAVE A COMMENT</label>
+                            <textarea class="w-full py-2 px-3 border rounded-lg" id="comment" name="comment" placeholder="Leave a Comment Here" style="height: 100px" required></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-2 px-4 text-white rounded-lg bg-red-800 hover:bg-red-700">SUBMIT</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <script src="https://kit.fontawesome.com/1aebf17ad5.js" crossorigin="anonymous"></script>
+</script>
+{% endblock content %}
