@@ -1,119 +1,97 @@
 {% extends 'core/base.html' %}
 
-{%  block title %}{{item.name}}{% endblock title %}
+{% block title %}{{ item.name }}{% endblock title %}
 
 {% block content %}
-    <div class ="grid grid-cols-5 gap-1">
-        <div class="col-span-3 flex items-center justify-center">
-            <img src="{{ item.image.url }}" class="rounded-xl">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-2 lg:text-xl">
+        <div class="col-span-1 lg:col-span-3 flex items-center justify-center">
+            <img src="{{ item.image.url }}" class="rounded-xl w-full">
         </div>
 
+        <div class="lg:col-span-2 p-4 lg:p-6 bg-gray-100 rounded-xl">
+            <div class="mb-6 lg:mb-8">
+                <div class="flex items-center lg:mb-3">
+                    <img class="lg:mt-3 w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                         src="{{ user.profile.image.url }}" alt="Bordered avatar" style="border: 2px solid {{ user.profile.color }};">
+                    <h2 class="lg:mt-3 text-2xl lg:text-3xl font-bold ml-4">{{ item.name }}</h2>
+                </div>
+                <h2 class="lg:mb-3 text-2xl lg:text-3xl font-bold">₱ {{ item.price }}</h2>
+                <p class="lg:mb-3"><strong>Seller:</strong> {{ item.created_by }}</p>
+                <p class="lg:mb-3"><strong>Category:</strong> {{ item.category }}</p>
 
-        <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
-            <div class="profile-container">
-                <a href="{% url 'profile' item.created_by %}">
-                <img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                     src="{{ item.created_by.profile.image.url }}" alt="Bordered avatar"
-                     style="border: 2px solid {{ item.created_by.profile.color }}"></a>
-                    <div class="user-tooltip">
-                        <p class="ml-2 text-sm"><strong>{{ item.created_by.username }}</strong></p>
-                        <p class="ml-2 text-sm">
-                            <strong>{{ item.created_by.profile.first_name }} {{ item.created_by.profile.last_name }}</strong>
-                        </p>
-                        <p class="ml-2 text-sm"><strong>{{ item.created_by.email }}</strong></p>
-                        <p class="ml-2 text-sm"><strong>Upvotes: {{ item.created_by.profile.upvotes }}</strong></p>
-                        <p class="ml-2 text-sm"><strong>Downvotes: {{ item.created_by.profile.downvotes }}</strong></p>
-                    </div>
+                {% if item.description %}
+                    <p class="mb-3"><strong>Description:</strong><br>{{ item.description }}</p>
+                {% endif %}
+
+                <div class="">
+                    {% if request.user == item.created_by or request.user.is_superuser %}
+                        <p class="mt-8 text-gray-600">This is your item!</p>
+                        <a href="{% url 'item:edit_item' item.id %}" class="button-edit" style="background: green">Edit</a>
+                        <a href="{% url 'item:delete' item.id %}" class="button-delete" style="background: darkred">Delete</a>
+
+                        {% if request.user.is_superuser %}
+                            <a href="{% url 'conversation:new_conversation' item.id %}" class="button-contact-seller lg:mt-3"
+                            style="background: {{ user.profile.color }}">Contact Seller</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'conversation:new_conversation' item.id %}" class="button-contact-seller lg:mt-3"
+                        style="background: {{ user.profile.color }}">Contact Seller</a>
+                    {% endif %}
+                </div>
             </div>
-
-            <h2 class="mb-6 text-3xl">{{ item.name }}</h2>
-            <p class="text-black"><strong>Price:</strong>{{ item.price }}</p>
-            <p class="text-black"><strong>Seller:</strong>{{ item.created_by }}</p>
-            <p class="text-black"><strong>Category:</strong>{{ item.category }}</p>
-
-            {% if item.description %}
-                <p class="text-gray-700">
-                    <strong class ="text-black">Description:</strong><br>
-                    {{item.description }}
-                </p>
-            {% endif %}
-            {% if request.user == item.created_by %}
-                <div class ="mt-6 p-6 bg-white rounded-xl">
-                    <p>This is your item!</p>
-                    <a href ="{% url 'item:edit_item' item.id %}"
-                       class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-800 text-white rounded-xl hover:bg-teal-950">Edit</a>
-                    <a href ="{% url 'item:delete' item.id %}"
-                       class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-800 text-white rounded-xl hover:bg-red-950">Delete</a>
-                </div>
-
-            {% elif request.user.is_superuser %}
-                <div class ="mt-6 p-6 bg-white rounded-xl">
-                    <p>This is your item!</p>
-                    <a href ="{% url 'item:edit_item' item.id %}"
-                       class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-800 text-white rounded-xl hover:bg-teal-950">Edit</a>
-                    <a href ="{% url 'item:delete' item.id %}"
-                       class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-800 text-white rounded-xl hover:bg-red-950">Delete</a>
-                     <a href = "{% url 'conversation:new_conversation' item.id%}"
-                        class ="inline-block mt-6 px-6 py-3 text-lg font-semibold text-white rounded-xl hover:bg-red-950" style ="background: {{ user.profile.color }}">
-                        Contact Seller </a>
-                </div>
-
-
-            {% else %}
-            <a href = "{% url 'conversation:new_conversation' item.id%}"
-               class ="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-800 text-white rounded-xl hover:bg-red-950">
-                Contact Seller
-            </a>
-            {% endif %}
         </div>
-    </div>
 
-    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
-        <h2 class="mb-12 text-2xl text-center uppercase font-bold">Related items</h2>
-
-        <div class="col-span-3 flex space-x-4" style="margin-right: 20px; margin-left: 20px">
-            <div class="grid grid-cols-3 gap-3">
-                {% for item in related_items %}
-                    <div class="flex">
-                        <a href="{% url 'item:detail' item.id %}">
-                            <div class="bg-white rounded-lg overflow-hidden shadow-md flex">
-                                <img src="{{ item.image.url }}" class="w-32 h-32 object-cover rounded-t-xl m-auto">
-                                <div class="p-4">
-                                    <h2 class="text-lg font-bold uppercase">{{ item.name }}</h2>
-                                    <p class="text-gray-500 text-sm">Price: {{ item.price }}</p>
-                                    <!-- You can customize the content here to match your "Newest items" section -->
-                                </div>
+        <!-- Related items -->
+        <div class="col-span-1 lg:col-span-5 p-4 lg:p-6 bg-gray-100 rounded-xl mt-6">
+            <h2 class="mb-4 text-2xl lg:text-3xl text-center uppercase font-bold">Related items</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {% for related_item in related_items %}
+                    <a href="{% url 'item:detail' related_item.id %}">
+                        <div class="bg-white rounded-lg shadow-md">
+                            <img src="{{ related_item.image.url }}" class="w-full rounded-t-xl">
+                            <div class="p-4">
+                                <h2 class="text-lg font-bold uppercase">{{ related_item.name }}</h2>
+                                <p class="text-gray-500 font-bold text-md">₱ {{ related_item.price }}</p>
+                                <p class="text-gray-500 text-md">Category: {{ item.category }}</p>
                             </div>
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                 {% endfor %}
             </div>
         </div>
     </div>
 
-
     <style>
-        .profile-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .user-tooltip {
-            display: none;
-            position: absolute;
-            background-color: {{ user.profile.color }};
-            border: 3px solid #000000;
-            color: #fff;
-            padding: 10px;
-            z-index: 9999;
-            width: 300px;
-            top: 0;
-            right: 150%;
-        }
-
-        .profile-container:hover .user-tooltip {
+        .button-edit,
+        .button-delete,
+        .button-contact-seller {
             display: block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            text-align: center;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .button-edit {
+            background-color: #2ca02c; /* Green */
+        }
+
+        .button-delete {
+            background-color: #d9534f; /* Red */
+        }
+
+        .button-contact-seller {
+            background-color: #337ab7; /* Blue */
+        }
+
+        /* Additional styling for mobile responsiveness */
+        @media (max-width: 768px) {
+            .button-edit,
+            .button-delete,
+            .button-contact-seller {
+                width: 100%;
+            }
         }
     </style>
-
 {% endblock content %}
