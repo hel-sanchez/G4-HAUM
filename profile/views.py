@@ -21,17 +21,15 @@ def profile(request, username):
     if request.method == 'POST':
         print("post method")
         u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES,
-                                   instance=request.user.profile)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         font_form = FontPreferenceForm(request.POST, instance=request.user.profile)
         if u_form.is_valid() and p_form.is_valid() and font_form.is_valid():
-            # request.user.save()
+
             print("valid form")
             u_form.save()
             p_form.save()
             font_form.save()
-            # # profile.color = form.cleaned_data['color']
-            # color_form.save()
+
             messages.success(request, f'Your account has been updated!')
             return redirect('profile', request.user.username)
     else:
@@ -71,7 +69,6 @@ def profile(request, username):
         'locations': locations,
         'color_form': color_form,
         'login_history': login_history
-
     }
 
     return render(request, 'profile/profile.html', context)

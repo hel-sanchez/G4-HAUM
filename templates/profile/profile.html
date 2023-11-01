@@ -1,21 +1,21 @@
 {% extends 'core/base.html' %}
 {% block title %}Profile{% endblock title %}
 {% load crispy_forms_tags %}
+
 {% block content %}
-    <div class="bg-white p-8 rounded-lg shadow-md">
-        <div class="flex items-center">
+    <div class="bg-white rounded-lg shadow-md">
+        <div class="flex items-center ml-5 lg">
             <img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
                  src="{{ user.profile.image.url }}" alt="Bordered avatar" style="border: 2px solid {{ user.profile.color }};">
-
-            <div class="ml-4">
+            <div class="ml-3 mt-2">
                 <h2 class="text-2xl font-bold">{{ user.username }}</h2>
                 <p class="text-gray-500">{{ user.email }}</p>
             </div>
         </div>
 
-        <div class="bg-white p-8 rounded-lg shadow-lg mt-2 mb-2">
+        <div class="bg-white ml-3 mr-3 mt-3">
             {% if user.username != request.user.username %}
-                <div class="flex items-center mb-4">
+                <div class="flex items-center mb-4 grid-cols-2">
                     <!-- Upvote button -->
                     <form method="post" action="{% url 'upvote' user.username %}">
                         {% csrf_token %}
@@ -83,7 +83,6 @@
                     </div>
                 {% endif %}
 
-
             {% else %}
                 <form method="POST" enctype="multipart/form-data" class="mt-4">
                     {% csrf_token %}
@@ -135,31 +134,33 @@
 
                     <div class="mb-4 w-1/2">
                         <label for="{{ form.color.id_for_label }}">Choose a color:</label>
-                        <input type="color" id="color" name="color" value="{{ user.profile.color }}">
+                        <input type="color" id="color" name="color" class="border border-black" value="{{ user.profile.color }}">
                     </div>
 
                     <div class="mb-4 w-1/2">
                         {{ form.as_table }}
                     </div>
 
-                    <div class="mb-4 w-1/2">
-                        <label for="{{ p_form.image.id_for_label }}" class="block text-gray-600 font-medium">Profile Image:</label>
-                        <input type="file" id="profile-image" name="image" class="border border-gray-300 p-2 rounded w-full">
+                    <div class="mb-4 w-1/2 lg:grid-cols-2">
+                        <label for="{{ p_form.image.id_for_label }}" class="block text-gray-800 font-medium lg:mb-1">Profile Image:
+                        <input type="file" id="profile-image" name="image"></label>
                     </div>
 
-                    <button class="hover:bg-red-900 text-white font-semibold py-2 px-4 rounded w-1/8"
+                    <div class="flex space-x-1 lg:grid-cols-2">
+                        <button class="p-2 text-md text-white rounded-lg items-center uppercase font-bold lg:text-lg hover:bg-red-900"
                             style="background: {{ user.profile.color }}" type="submit">Update Profile</button>
-                    <button class="hover:bg-red-900 text-white font-semibold py-2 px-4 rounded w-1/8"
-                            style="background: {{ user.profile.color }}" type="button" id="submit-button">
-                        <a href="{% url 'password_reset' %}" class="text-white">Change Password</a>
-                    </button>
+                            <a href="{% url 'password_reset' %}"
+                               class="p-2 text-md text-center text-white rounded-lg uppercase font-bold lg:text-lg hover:bg-red-900"
+                               style="background: {{ user.profile.color }}">Change Password</a>
+                        </button>
+                    </div>
 
-                    <div class="mt-10 bg-white p-10 rounded-xl shadow-xl">
-                        <label class="font-bold text-xl uppercase">Login History:</label><br><br>
+                    <div class="mt-10 bg-black-200 p-8 rounded-xl shadow-xl">
+                        <label class="font-bold text-xl uppercase">Login History:</label><br>
                             {% for foo in login_history %}
                                 {{ foo.date_time }}<br>
                                 {{ foo.ip }}
-                                {{ foo.user_agent }}<br><br>
+                                {{ foo.user_agent }}<br>
                             {% endfor %}
                     </div>
                 </form>

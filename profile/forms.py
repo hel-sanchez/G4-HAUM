@@ -40,10 +40,18 @@ class ColorPreferenceForm(forms.ModelForm):
 
 class FontPreferenceForm(forms.ModelForm):
     FONT_CHOICES = (
+        ('Default', 'Default'),
+        ('Open Sans', 'Open Sans'),
         ('Young Serif', 'Young Serif'),
         ('Roboto Slab', 'Roboto Slab'),
+        ('Roboto Mono', 'Roboto Mono'),
         ('Noto Sans JP', 'Noto Sans JP'),
         ('Yuji Hentaigana Akari', 'Yuji Hentaigana Akari'),
+        ('Agbalumo', 'Agbalumo'),
+        ('Alegreya Sans', 'Alegreya Sans'),
+        ('Montserrat', 'Montserrat'),
+        ('Edu TAS Begginer', 'Edu TAS Begginer'),
+        ('Playpen Sans', 'Playpen Sans'),
     )
     # Replaced the font field with choices added new font option
 

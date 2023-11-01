@@ -15,22 +15,28 @@
 <body>
     <div style="font-family: {{ user.profile.font_preference }}">
         <nav class="py-4 px-4 lg:py-6 lg:px-6 flex justify-between items-center border-b border-gray-200 bg-{{ user.profile.color }}">
-            <a href="/" class="text-xl lg:text-2xl font-bold" style="font: {{ user.profile.color }}; font-size: 30px">H A U M</a>
+            <a href="/" class="text-xl lg:text-3xl lg:ml-5 font-bold tracking-normal lg:tracking-widest"
+               style="color: {{ user.profile.color }}; font-size: 30px;">HAUM</a>
 
             {% if request.user.is_authenticated %}
-                <button class="focus:outline-none lg:hidden text-lg text-white mr-5" onclick="toggleMobileNav()" style="color: black;">
+                <button class="focus:outline-none lg:hidden text-lg text-white" onclick="toggleMobileNav()" style="color: black;">
                     <i class="fas fa-bars"></i>
                 </button>
 
-                <div id="mobileNav" class="hidden lg:flex space-x-6 lg:mr-5">
+                <div id="mobileNav" class="hidden lg:flex space-x-6 lg:mr-10">
                     <div class="container-fluid text-center">
                         <ul class="space-y-2 lg:flex lg:space-x-6">
                             <li><a href="{% url 'item:new_item' %}"
                                    class="text-lg lg:text-base font-semibold text-white rounded-md block py-3 lg:p-3 lg:text-xl lg:mt-2"
-                                   style="background: {{ user.profile.color }}">New Items</a></li>
+                                   style="background: {{ user.profile.color }}"><i class="fas fa-plus-circle"></i> Upload
+                                </a>
+                            </li>
+
                             <li><a href="{% url 'item:items' %}"
                                    class="text-lg lg:text-base font-semibold text-white rounded-md block py-3 lg:p-3 lg:text-xl"
-                                   style="background: {{ user.profile.color }}">Browse</a></li>
+                                   style="background: {{ user.profile.color }}"><i class="fas fa-search"></i> Browse
+                                </a>
+                            </li>
 
                             <select onchange="window.location.href=this.value"
                                     class="text-lg lg:text-base font-semibold text-white rounded-md py-3 lg:p-1 lg:text-xl"

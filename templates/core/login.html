@@ -10,7 +10,7 @@
 
         {% if request.method == "POST" %}
             {% if not user.is_authenticated %}
-                <div class="mb-3 p-4 bg-red-100 rounded-xl text-sm text-red-900">
+                <div class="mb-3 p-4 bg-red-200 rounded-xl text-sm text-red-900">
                     Your account is not yet activated. Please check your email for the activation link or
                     <a href="{% url 'request_new_activation_link' %}" class="hover:underline">request a new activation link</a>.
                 </div>
@@ -30,8 +30,8 @@
 
             <div class="mb-4">
                 <label class="block mb-1">Password</label>
-                <div class="relative">
-                    <input class="w-full py-2 px-3 rounded-md" type="password" id="password" name="password" placeholder="Password">
+                <div class="position-relative">
+                    <input class="w-full py-4 px-3 rounded-xl" type="password" id="password" name="password" placeholder="Password">
                     <span class="absolute inset-y-0 right-0 flex items-center pr-3">
                         <button type="button" id="passwordToggle" class="hover:text-red-900">
                             <i class="fas fa-eye"></i>
@@ -41,10 +41,11 @@
             </div>
 
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <button class="py-3 px-6 md:mr-2 text-base md:text-lg bg-red-800 hover:bg-red-950 rounded-md font-semibold text-white mb-4 md:mb-0">Submit</button>
-                <p class="text-gray-900 text-sm md:text-base">
+                <button class="py-3 px-6 md:mr-2 text-base md:text-lg bg-red-800 hover:bg-red-950 rounded-md font-semibold text-white mb-4">
+                    Submit</button>
+                <p class="text-gray-900 text-sm lg:text-base">
                     Don't have an account yet?
-                    <a href="{% url 'signup' %}" class="text-red-800 hover:underline mb-2 md:mb-0 md:ml-2 uppercase">Sign Up</a>
+                    <a href="{% url 'signup' %}" class="text-red-800 hover:underline mb-2 uppercase">Sign Up</a>
                     <br>
                     Forgot your password?
                     <a href="{% url 'password_reset' %}" class="text-red-800 hover:underline uppercase">Forgot Password</a>
@@ -77,8 +78,8 @@
 
         .position-relative i {
             position: absolute;
-            top: 59px;
-            right: 53px;
+            top: 29px;
+            right: 17px;
             transform: translateY(-50%);
         }
     </style>

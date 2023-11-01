@@ -4,18 +4,18 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <div class="mt-6 p-4">
-            <div class="mt-6 p-4 bg-gray-100 rounded-xl shadow-xl">
-                <h2 class="mb-4 text-2xl text-center uppercase font-bold">Newest items</h2>
+        <div class="">
+            <div class="p-4 bg-gray-100 rounded-xl shadow-xl">
+                <h2 class="mt-2 mb-7 text-2xl text-center uppercase font-bold">Newest items</h2>
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
                     {% for item in items %}
                         <a href="{% url 'item:detail' item.id %}" class="block">
-                            <div class="bg-white rounded-lg overflow-hidden shadow-md flex">
-                                <img src="{{ item.image.url }}" class="w-32 h-32 object-cover rounded-t-xl p-2">
-                                <div class="p-4">
+                            <div class="bg-white rounded-lg overflow-hidden shadow-md flex flex-col lg:flex-row">
+                                <img src="{{ item.image.url }}" class="mt-4 object-cover shadow-xl rounded-t-xl p-3 lg:ml-3 lg:shadow-xl lg:w-32 lg:h-32 lg:p-1 lg:rounded-lg">
+                                <div class="p-5 text-center lg:w-full lg:text-left lg:p-4">
                                     <h2 class="text-lg font-bold uppercase">{{ item.name }}</h2>
-                                    <p class="text-lg font-bold uppercase">₱{{ item.price }}</p>
+                                    <p class="text-lg font-bold uppercase">₱ {{ item.price }}</p>
                                     <p class="text-gray-500 text-sm">Category: {{ item.category.name }}</p>
                                     <p class="text-gray-500 text-sm">Location: {{ item.created_by.profile.location.name }}</p>
                                     <p class="text-gray-500 text-sm">Upvotes: {{ item.created_by.profile.upvotes }}</p>
@@ -27,49 +27,46 @@
                 </div>
 
                 {#------------------PAGINATION------------------#}
-                <div class="mt-4 flex justify-center items-center">
-                    <div class="pagination flex items-center space-x-4">
+                <div class="mt-10 flex justify-center items-center">
+                    <div class="pagination flex flex-col lg:flex-row items-center space-x-4">
 
                         {% if items.has_previous %}
-                            <a href="?page=1" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">
-                                <i class="fas fa-angle-double-left"></i> First
-                            </a>
+                            <div class="flex items-center">
+                                <a href="?page=1" class="text-gray-500 text-lg lg:mr-3 lg:text-lg hover:text-orange-500 hover:bg-gray-200">
+                                    <i class="fas fa-angle-double-left"></i> First
+                                </a>
 
-                            <ul class="flex space-x-2">
-                                {% for page in items.paginator.page_range %}
-                                    <li>
-                                        <a href="?page={{ page }}"
-                                           class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">
-                                            {{ page }}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-
-                            <a href="?page={{ items.previous_page_number }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">
-                                <i class="fas fa-angle-left"></i> Previous
-                            </a>
+                                <a href="?page={{ items.previous_page_number }}"
+                                   class="text-gray-500 text-lg lg:text-lg hover:text-orange-500 hover:bg-gray-200 ml-4 lg:ml-0">
+                                    <i class="fas fa-angle-left"></i> Previous
+                                </a>
+                            </div>
                         {% endif %}
 
+                        <ul class="flex flex-wrap lg:flex-nowrap justify-center lg:justify-start space-x-2 lg:space-x-2">
+                            {% for page in items.paginator.page_range %}
+                                <li>
+                                    <a href="?page={{ page }}"
+                                       class="text-gray-500 text-lg lg:text-lg hover:text-orange-500 hover:bg-gray-200 px-1 lg:p-2
+                                          rounded-md border border-gray-300">
+                                        {{ page }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
                         {% if items.has_next %}
-                            <a href="?page={{ items.next_page_number }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">
-                                Next <i class="fas fa-angle-right"></i>
-                            </a>
+                            <div class="flex items-center">
+                                <a href="?page={{ items.next_page_number }}"
+                                   class="text-gray-500 text-lg lg:text-lg lg:mr-3 hover:text-orange-500 hover:bg-gray-200 mr-4 lg:mr-0">
+                                    Next <i class="fas fa-angle-right"></i>
+                                </a>
 
-                            <ul class="flex space-x-2">
-                                {% for page in items.paginator.page_range %}
-                                    <li>
-                                        <a href="?page={{ page }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">
-                                            {{ page }}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-
-                            <a href="?page={{ items.paginator.num_pages }}"
-                               class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">
-                                Last <i class="fas fa-angle-double-right"></i>
-                            </a>
+                                <a href="?page={{ items.paginator.num_pages }}"
+                                   class="text-gray-500 text-lg lg:text-lg hover:text-orange-500 hover:bg-gray-200">
+                                    Last <i class="fas fa-angle-double-right"></i>
+                                </a>
+                            </div>
                         {% endif %}
                     </div>
                 </div>

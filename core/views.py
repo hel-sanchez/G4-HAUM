@@ -19,7 +19,7 @@ from django.core.paginator import Paginator, EmptyPage
 
 # Create your views here.
 def index(request):
-    items = Item.objects.filter(is_sold=False)[0:6]
+    items = Item.objects.filter(is_sold=False)
     user_color = request.session.get('user_color', None)
     categories = Category.objects.all()
     items_per_page = 4  # ADJUST NALANG IF ILAN GUSTO NIYO

@@ -38,7 +38,7 @@
             <div class="mb-3 position-relative">
                 <label class="block mb-2">Password</label>
                 <div class="input-group">
-                    <input class="w-full py-3 px-4 rounded-md" type="password" id="password" name="password1" placeholder="Password">
+                    <input class="w-full py-4 px-3 rounded-xl" type="password" id="password" name="password1" placeholder="Password">
                     <span class="absolute inset-y-0 right-0 flex items-center pr-3">
                         <button type="button" id="passwordToggle" class="hover:text-red-900">
                             <i class="fas fa-eye"></i>
@@ -51,7 +51,7 @@
             <div class="mb-3 position-relative">
                 <label class="block mb-2">Confirm Password</label>
                 <div class="input-group">
-                    <input class="w-full py-3 px-4 rounded-md" type="password" id="password2" name="password2" placeholder="Confirm Password">
+                    <input class="w-full py-4 px-3 rounded-xl" type="password" id="password2" name="password2" placeholder="Confirm Password">
                     <span class="absolute inset-y-0 right-0 flex items-center pr-3">
                         <button type="button" id="passwordToggle2" class="hover:text-red-900">
                             <i class="fas fa-eye"></i>
@@ -68,10 +68,12 @@
             {% endif %}
 
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <button class="py-3 px-6 md:mr-2 text-base md:text-lg bg-red-800 hover:bg-red-950 rounded-md font-semibold text-white mb-4 md:mb-0">Submit</button>
+                <button class="py-3 px-6 md:mr-2 text-base md:text-lg bg-red-800 hover:bg-red-950 rounded-md font-semibold text-white mb-4">
+                    Submit
+                </button>
                 <p class="text-gray-900 text-sm md:text-base">
                     Already have an account?
-                    <a href="{% url 'login' %}" class="text-red-800 hover:underline mb-2 md:mb-0 md:ml-2 uppercase">
+                    <a href="{% url 'login' %}" class="text-red-800 hover:underline mb-2 uppercase">
                         Log in
                     </a>
                 </p>
@@ -153,7 +155,7 @@
 
         .input-group button {
             position: absolute;
-            right: 21px;
+            right: 17px;
             top: 50%;
             transform: translateY(-50%);
         }

@@ -10,6 +10,7 @@ from item.forms import NewItemForm, EditItemForm, CategoryForm, addCategory, add
 from item.models import Item, Category, PriceRange
 from profile.models import Location
 from django.core.paginator import Paginator, EmptyPage
+from django.contrib import messages
 
 
 def items(request):
@@ -62,23 +63,46 @@ def items(request):
         items = items.filter(created_by__profile__location__in=location_objs)
 
 
-        # items = locations.filter(id__in=location_ids)
-
-    print(request.GET.get('min_value'))
-    minValue = request.GET.get('min_value')
-    maxValue = request.GET.get('max_value')
-
-    if minValue == maxValue:
-        print('Invalid price range')
-    elif minValue > maxValue:
-        print('Minimum must be lower than maximum')
-    else:
-        items = items.filter(price__gte=minValue, price__lte=maxValue)
-
-        print(items)
-
     if query:
         items = items.filter(Q(name__icontains=query) | Q(description__icontains=query))
+
+    # Ensure that 'min_value' and 'max_value' are not empty and convert them to floats
+    min_value = request.GET.get('min_value')
+    max_value = request.GET.get('max_value')
+
+    if min_value and not max_value:
+        messages.error(request, "Please provide a value for 'Max Price'.")
+    elif max_value and not min_value:
+        messages.error(request, "Please provide a value for 'Min Price'.")
+    elif min_value and max_value:
+        min_value = float(min_value)
+        max_value = float(max_value)
+
+        if min_value == max_value:
+            messages.error(request, "Invalid price range.")
+        elif min_value < 0 or max_value < 0:
+            messages.error(request, "Prices cannot be negative.")
+        elif max_value - min_value > 99999:
+            messages.error(request, "Price range cannot exceed 5 digits.")
+        elif min_value > max_value:
+            messages.error(request, 'Minimum must be lower than maximum')
+        else:
+            items = items.filter(price__gte=min_value, price__lte=max_value)
+
+    else:
+        return render(request, 'item/items.html', {
+            'items': items,
+            'query': query,
+            'category': category,
+            'location': locations,
+            'price_ranges': price_ranges,
+            'selected_price_ranges': price_range_ids,
+            'min_price': min_price,
+            'max_price': max_price,
+            'test': category_ids,
+            'test2': location_ids,
+        })
+
 
     items_per_page = 15# ADJUST NALANG IF ILAN GUSTO NIYO
 
@@ -115,7 +139,6 @@ def items(request):
         'max_price': max_price,
         'test': category_ids,
         'test2': location_ids,
-
     })
 
 
