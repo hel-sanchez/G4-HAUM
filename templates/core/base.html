@@ -45,7 +45,7 @@
                                 <option value="{% url 'profile' request.user.username %}">&#128100; My Profile</option>
                                 <option value="{% url 'conversation:inbox' %}">&#9993; My Inbox</option>
                                 <option value="{% url 'dashboard:index_d' %}">&#128202; My Dashboard</option>
-                                <option value="{% url 'logout' %}">&#128682; Logout</option>
+                                <option value="{% url 'logout' %}">Logout</option>
                             </select>
                         </ul>
                     </div>
@@ -53,7 +53,7 @@
             {% endif %}
         </nav>
 
-        <div class="px-12 py-12">
+        <div class="p-5">
             {% block content %}{% endblock content %}
         </div>
 

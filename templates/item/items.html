@@ -128,24 +128,28 @@
 
         <!-- Items displayed in a single column -->
         <div class="col-span-1 p-5 lg:text-center" style="margin-top: 10px;">
-            <div class="text-center text-xl font-bold uppercase mb-5 lg:text-center">new items!!</div>
-            <div class="grid grid-cols-1 gap-4 lg:grid-cols-4">
-                {% for item in items %}
-                    <a href="{% url 'item:detail' item.id %}" class="block">
-                        <div class="bg-white rounded-lg overflow-hidden shadow-md flex flex-col lg:flex-row">
-                            <img src="{{ item.image.url }}" class="mt-4 object-cover shadow-xl rounded-t-xl p-3 lg:ml-3 lg:shadow-xl lg:w-32 lg:h-32 lg:p-1 lg:rounded-lg">
-                            <div class="p-5 text-center lg:w-full lg:text-left lg:p-4">
-                                <h2 class="text-lg font-bold uppercase">{{ item.name }}</h2>
-                                <p class="text-lg font-bold uppercase">₱ {{ item.price }}</p>
-                                <p class="text-gray-500 text-sm">Category: {{ item.category.name }}</p>
-                                <p class="text-gray-500 text-sm">Location: {{ item.created_by.profile.location.name }}</p>
-                                <p class="text-gray-500 text-sm">Upvotes: {{ item.created_by.profile.upvotes }}</p>
-                                <p class="text-gray-500 text-sm">Downvotes: {{ item.created_by.profile.downvotes }}</p>
+            {% if items %}
+                <div class="text-center text-xl font-bold uppercase mb-5 lg:text-center">New items!!</div>
+                <div class="grid grid-cols-1 gap-4 lg:grid-cols-4">
+                    {% for item in items %}
+                        <a href="{% url 'item:detail' item.id %}" class="block">
+                            <div class="bg-white rounded-lg overflow-hidden shadow-md flex flex-col lg:flex-row">
+                                <img src="{{ item.image.url }}" class="mt-4 object-cover shadow-xl rounded-t-xl p-3 lg:ml-3 lg:shadow-xl lg:w-32 lg:h-32 lg:p-1 lg:rounded-lg">
+                                <div class="p-5 text-center lg:w-full lg:text-left lg:p-4">
+                                    <h2 class="text-lg font-bold uppercase">{{ item.name }}</h2>
+                                    <p class="text-lg font-bold uppercase">₱ {{ item.price }}</p>
+                                    <p class="text-gray-500 text-sm">Category: {{ item.category.name }}</p>
+                                    <p class="text-gray-500 text-sm">Location: {{ item.created_by.profile.location.name }}</p>
+                                    <p class="text-gray-500 text-sm">Upvotes: {{ item.created_by.profile.upvotes }}</p>
+                                    <p class="text-gray-500 text-sm">Downvotes: {{ item.created_by.profile.downvotes }}</p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center text-xl font-bold uppercase mb-5 lg:text-center">Item not found</div>
+            {% endif %}
         </div>
     </div>
 

@@ -89,6 +89,9 @@ def items(request):
         else:
             items = items.filter(price__gte=min_value, price__lte=max_value)
 
+    if not items.exists():
+        messages.error(request, "Item not found")
+
     else:
         return render(request, 'item/items.html', {
             'items': items,

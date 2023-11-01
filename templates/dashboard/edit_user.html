@@ -7,19 +7,19 @@
         {% csrf_token %}
         <div class="mb-4">
             <label for="id_first_name" class="text-black">Username:</label>
-            {{ user_form.username }}
+            <div class="border border-gray-500 rounded-lg p-1 mt-2">{{ user_form.username }}</div>
         </div>
         <div class="mb-4">
             <label for="id_first_name" class="text-black">First Name:</label>
-            {{ form.first_name }}
+            <div class="border border-gray-500 rounded-lg p-1 mt-2">{{ form.first_name }}</div>
         </div>
         <div class="mb-4">
             <label for="id_last_name" class="text-black">Last Name:</label>
-            {{ form.last_name }}
+            <div class="border border-gray-500 rounded-lg p-1 mt-2">{{ form.last_name }}</div>
         </div>
         <div class="mb-4">
             <label for="id_bio" class="text-black">Bio:</label>
-            {{ form.bio }}
+            <div class="border border-gray-500 rounded-lg p-1 mt-2">{{ form.bio }}</div>
         </div>
         <div class="mb-4">
             <label for="id_location" class="text-black">Location:</label>
@@ -27,17 +27,14 @@
         </div>
         <div class="mb-4">
             <label for="id_address" class="text-black">Address:</label>
-            {{ form.address }}
+            <div class="border border-gray-500 rounded-lg p-1 mt-2">{{ form.address }}</div>
         </div>
         <div class="mb-4">
             <label for="id_first_name" class="text-black">Email:</label>
-            {{ user_form.email }}
+            <div class="border border-gray-500 rounded-lg p-1 mt-2">{{ user_form.email }}</div>
         </div>
-        <div class="mb-4">
-            <label for="id_first_name" class="text-black">Username:</label>
-            {{ user_form.username }}
-        </div>
-        <button type="submit" class="bg-red-800 text-white px-4 py-2 rounded-lg w-full hover:bg-red-900" style="background: {{ user.profile.colors }}">
+
+        <button type="submit" class="mt-5 bg-red-800 text-white px-4 py-2 rounded-lg w-full hover:bg-red-900" style="background: {{ user.profile.colors }}">
             Save
         </button>
     </form>

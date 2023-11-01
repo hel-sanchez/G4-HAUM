@@ -18,7 +18,7 @@ def index_d(request):
     items = Item.objects.filter(created_by=request.user)
     users = User.objects.all()
     user_id = request.user.id
-    items_per_page = 15  # ADJUST NALANG IF ILAN GUSTO NIYO
+    items_per_page = 4  # ADJUST NALANG IF ILAN GUSTO NIYO
 
     # Create a Paginator object
     paginator = Paginator(items, items_per_page)

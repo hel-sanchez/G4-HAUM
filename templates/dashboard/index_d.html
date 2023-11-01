@@ -4,9 +4,9 @@
 
 {% block content %}
     <div class="mt-6 mb-10 px-6 py-12 bg-gray-100 rounded-xl mx-auto"> <!-- Apply mx-auto here to center the content -->
-        <h2 class="mb-12 text-2xl text-center">My items</h2>
+        <h2 class="mb-12 text-2xl text-center uppercase font-bold">My items</h2>
 
-        <div class="grid grid-cols-3 gap-3">
+        <div class="grid grid-cols-1 gap-3 lg:grid-cols-4">
             {% for item in items %}
                 <div>
                     <a href="{% url 'item:detail' item.id %}">
@@ -22,106 +22,157 @@
                 </div>
             {% endfor %}
         </div>
+
+        {#------------------PAGINATION------------------#}
+        <div class="mt-10 flex justify-center items-center">
+            <div class="pagination flex flex-col lg:flex-row items-center space-x-4">
+                {% if items.has_previous %}
+                    <div class="flex items-center">
+                        <a href="?page=1" class="text-gray-500 text-lg lg:mr-3 lg:text-lg hover:text-orange-500 hover:bg-gray-200">
+                            <i class="fas fa-angle-double-left"></i> First
+                        </a>
+                        <a href="?page={{ items.previous_page_number }}"
+                           class="text-gray-500 text-lg lg:text-lg hover:text-orange-500 hover:bg-gray-200 ml-4 lg:ml-0">
+                            <i class="fas fa-angle-left"></i> Previous
+                        </a>
+                    </div>
+                {% endif %}
+
+                <ul class="flex flex-wrap lg:flex-nowrap justify-center lg:justify-start space-x-2 lg:space-x-2">
+                    {% for page in items.paginator.page_range %}
+                        <li>
+                            <a href="?page={{ page }}"
+                               class="text-gray-500 text-lg lg:text-lg hover:text-orange-500 hover:bg-gray-200 px-1 lg:p-2
+                                         rounded-md border border-gray-300">
+                                {{ page }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {% if items.has_next %}
+                    <div class="flex items-center">
+                        <a href="?page={{ items.next_page_number }}"
+                           class="text-gray-500 text-lg lg:text-lg lg:mr-3 hover:text-orange-500 hover:bg-gray-200 mr-4 lg:mr-0">
+                            Next <i class="fas fa-angle-right"></i>
+                        </a>
+
+                        <a href="?page={{ items.paginator.num_pages }}"
+                           class="text-gray-500 text-lg lg:text-lg hover:text-orange-500 hover:bg-gray-200">
+                            Last <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {#------------------PAGINATION------------------#}
     </div>
 
-            {#------------------PAGINATION------------------#}
-            <div class="mt-8 flex justify-center items-center">
-                <div class="pagination flex items-center space-x-4">
-                    {% if items.has_previous %}
-                        <a href="?page=1" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">First</a>
-                        <a href="?page={{ items.previous_page_number }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Previous</a>
-                    {% endif %}
-                    <ul class="flex space-x-2">
-                        {% for page in items.paginator.page_range %}
-                            <li>
-                                <a href="?page={{ page }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">{{ page }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    {% if items.has_next %}
-                        <a href="?page={{ items.next_page_number }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Next</a>
-                        <a href="?page={{ items.paginator.num_pages }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Last</a>
-                    {% endif %}
-                </div>
-            </div>
-            {#------------------PAGINATION------------------#}
-
     {% if request.user.is_superuser %}
-        <table class="border border-collapse w-full md:w-3/4 xl:w-1/2 mx-auto">
-            <thead>
-                <tr>
-                    <th class="border p-5">Profile Picture</th>
-                    <th class="border p-5">Username</th>
-                    <th class="border p-5">Email</th>
-                    <th class="border p-5">First Name</th>
-                    <th class="border p-5">Last Name</th>
-                    <th class="border p-5">Location</th>
-                    <th class="border p-5">Staff Status</th>
-                    <th class="border p-5">Profile</th>
-                    <th class="border p-5">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                    <tr class="text-center p-10">
-                        <td class="border p-5">
-                            <img src="{{ user.profile.image.url}}" alt="Profile Picture" class="w-12 h-12 rounded-full">
-                        </td>
-                        <td class="border p-2">{{ user.username }}</td>
-                        <td class="border p-2">{{ user.email }}</td>
-                        <td class="border p-2">{{ user.profile.first_name }}</td>
-                        <td class="border p-2">{{ user.profile.last_name }}</td>
-                        <td class="border p-2">{{ user.profile.location }}</td>
-                        <td class="border p-2">{{ user.is_staff }}</td>
-                        <td class="border p-2">
-                            <a href="{% url 'profile' username=user.username %}">
-                                <button class="bg-blue-800 hover:bg-blue-950 text-white py-2 px-4 rounded-lg">
-                                    View Profile
-                                </button>
-                            </a>
-                        </td>
-                        <td class="border p-2">
-                            <a href="{% url 'dashboard:delete_user' user.id %}">
-                                <button class="bg-red-800 hover:bg-red-950 text-white py-2 px-4 rounded-lg">
-                                    Delete User
-                                </button>
-                            </a>
-                        </td>
-                        <td class="border p-2">
-                            <a href="{% url 'dashboard:edit_user' user.id %}">
-                                <button class="bg-blue-800 hover:bg-blue-950 text-white py-2 px-4 rounded-lg">
-                                    Edit User
-                                </button>
-                            </a>
-                        </td>
+        <div class="max-w-full overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="uppercase">
+                        <th></th>
+                        <th class="border p-5">Profile Picture</th>
+                        <th class="border p-5">Username</th>
+                        <th class="border p-5">Email</th>
+                        <th class="border p-5">First Name</th>
+                        <th class="border p-5">Last Name</th>
+                        <th class="border p-5">Location</th>
+                        <th class="border p-5">Staff Status</th>
+                        <th class="border p-5">Profile</th>
+                        <th class="border p-5">Action</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    {% for user in users %}
+                        <tr class="text-center p-10">
+                            <td class="border p-2">
+                                <a href="{% url 'dashboard:edit_user' user.id %}">
+                                    <button class="text-white py-2 px-4 rounded-lg" style="background: {{ user.profile.color }}">
+                                        Edit User
+                                    </button>
+                                </a>
+                            </td>
+                            <td class="border p-5 flex justify-center items-center"> <!-- Apply flex classes -->
+                                <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="w-12 h-12 rounded-full">
+                            </td>
+                            <td class="border p-2">{{ user.username }}</td>
+                            <td class="border p-2">{{ user.email }}</td>
+                            <td class="border p-2">{{ user.profile.first_name }}</td>
+                            <td class="border p-2">{{ user.profile.last_name }}</td>
+                            <td class="border p-2">{{ user.profile.location }}</td>
+                            <td class="border p-2">{{ user.is_staff }}</td>
+                            <td class="border p-2">
+                                <a href="{% url 'profile' username=user.username %}">
+                                    <button class="bg-blue-800 hover:bg-blue-950 text-white py-2 px-4 rounded-lg">
+                                        View Profile
+                                    </button>
+                                </a>
+                            </td>
+                            <td class="border p-2">
+                                <a href="{% url 'dashboard:delete_user' user.id %}">
+                                    <button class="bg-red-800 hover:bg-red-950 text-white py-2 px-4 rounded-lg">
+                                        Delete User
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
         <div class="flex justify-center mt-4">
             <a href="{% url 'dashboard:add_user' %}">
                 <button class="bg-red-800 hover:bg-red-950 text-white py-2 px-4 rounded-lg">Add User</button>
             </a>
         </div>
-        <!-- Pagination -->
-            <div class="mt-8 flex justify-center items-center">
-                <div class="pagination flex items-center space-x-4">
-                    {% if items.has_previous %}
-                        <a href="?page=1" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">First</a>
-                        <a href="?page={{ items.previous_page_number }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Previous</a>
-                    {% endif %}
-                    <ul class="flex space-x-2">
-                        {% for page in items.paginator.page_range %}
-                            <li>
-                                <a href="?page={{ page }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">{{ page }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    {% if items.has_next %}
-                        <a href="?page={{ items.next_page_number }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Next</a>
-                        <a href="?page={{ items.paginator.num_pages }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Last</a>
-                    {% endif %}
-                </div>
+
+        {#------------------PAGINATION------------------#}
+        <div class="mt-7 flex justify-center items-center">
+            <div class="pagination flex flex-col lg:flex-row items-center space-x-4">
+                {% if items.has_previous %}
+                    <div class="flex items-center">
+                        <a href="?page=1" class="text-gray-500 text-lg lg:mr-3 lg:text-lg hover:text-orange-500 hover:bg-gray-200">
+                            <i class="fas fa-angle-double-left"></i> First
+                        </a>
+                        <a href="?page={{ items.previous_page_number }}"
+                           class="text-gray-500 text-lg lg:text-lg hover:text-orange-500 hover:bg-gray-200 ml-4 lg:ml-0">
+                            <i class="fas fa-angle-left"></i> Previous
+                        </a>
+                    </div>
+                {% endif %}
+
+                <ul class="flex flex-wrap lg:flex-nowrap justify-center lg:justify-start space-x-2 lg:space-x-2">
+                    {% for page in items.paginator.page_range %}
+                        <li>
+                            <a href="?page={{ page }}"
+                               class="text-gray-500 text-lg lg:text-lg hover:text-orange-500 hover:bg-gray-200 px-1 lg:p-2
+                                         rounded-md border border-gray-300">
+                                {{ page }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {% if items.has_next %}
+                    <div class="flex items-center">
+                        <a href="?page={{ items.next_page_number }}"
+                           class="text-gray-500 text-lg lg:text-lg lg:mr-3 hover:text-orange-500 hover:bg-gray-200 mr-4 lg:mr-0">
+                            Next <i class="fas fa-angle-right"></i>
+                        </a>
+
+                        <a href="?page={{ items.paginator.num_pages }}"
+                           class="text-gray-500 text-lg lg:text-lg hover:text-orange-500 hover:bg-gray-200">
+                            Last <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
+        </div>
+        {#------------------PAGINATION------------------#}
     {% endif %}
 {% endblock %}
