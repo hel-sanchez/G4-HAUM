@@ -12,9 +12,11 @@ from profile.models import Location
 from django.core.paginator import Paginator, EmptyPage
 from django.contrib import messages
 
-
+# auds comment start here galaw
 def items(request):
-    # print('asd')
+    if not request.user.is_authenticated:
+        return redirect('login')
+        # print('asd')
     query = request.GET.get('query', '')
     category_ids = request.GET.getlist('categories')  # Get a list of selected category IDs
     location_ids = request.GET.getlist('locations')  # Get a list of selected location IDs
@@ -143,7 +145,7 @@ def items(request):
         'test': category_ids,
         'test2': location_ids,
     })
-
+# auds comment end here galaw
 
 # Create your views here.
 def detail(request, pk):

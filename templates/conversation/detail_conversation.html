@@ -4,6 +4,14 @@
 
 {% block content %}
     <h1 class ="mb-4 text-3xl uppercase font-bold text-center">Conversation</h1>
+      <!-- Add this section in your HTML to display error messages -->
+                    {% if messages %}
+                        <ul class="messages ml-3 mt-2" style="color: red;">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
 
     <div class="space-y-6">
     {% for message in conversation.messages.all %}

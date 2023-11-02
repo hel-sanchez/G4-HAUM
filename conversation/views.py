@@ -6,7 +6,7 @@ from conversation.forms import ConversationMessageForm
 from conversation.models import Conversation
 from item.models import Item
 
-
+# auds comment start here galaw
 @login_required
 def new_conversation(request, item_pk):
     item = get_object_or_404(Item, pk=item_pk)
@@ -33,6 +33,14 @@ def new_conversation(request, item_pk):
 
             # Unmark the conversation as deleted (if it was deleted previously)
             conversation.deleted_by.remove(request.user)
+
+            # Ensure that the conversation is not deleted for other members
+            other_members = conversation.members.exclude(pk=request.user.pk)
+            conversation.deleted_by.remove(*other_members)
+
+
+            messages.success(request, "Message sent")
+
             return redirect('conversation:detail_conversation', pk=conversation.pk)
 
     else:
@@ -41,7 +49,6 @@ def new_conversation(request, item_pk):
     return render(request, 'conversation/new_conversation.html', {
         'form': form,
     })
-
 
 @login_required
 def inbox(request):
@@ -74,6 +81,7 @@ def detail_conversation(request, pk):
             other_members = conversation.members.exclude(pk=request.user.pk)
             conversation.deleted_by.remove(*other_members)
 
+            messages.success(request, "Message sent")
             return redirect('conversation:detail_conversation', pk=conversation.pk)
 
     else:
@@ -84,6 +92,7 @@ def detail_conversation(request, pk):
         'form': form,
     })
 
+# auds comment end here galaw
 
 @login_required
 def delete_conversation(request, pk):

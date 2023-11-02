@@ -34,7 +34,14 @@
                         <span class="ml-2 text-sm">{{ profile.downvotes }} Downvotes</span>
                     </form>
                 </div>
-
+                    <!-- Add this section in your HTML to display error messages -->
+                    {% if messages %}
+                        <ul class="messages ml-3 mt-2" style="color: red;">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 <div class="bg-gray-100 p-4 rounded-lg shadow-lg border border-gray-300">
                     <legend class="text-xl font-bold mb-3 text-gray-700">Profile Info</legend>
                     <div class="text-gray-700">
@@ -75,6 +82,7 @@
                                         <p class="text-gray-500 text-sm">Location: {{ item.created_by.profile.location.name }}</p>
                                         <p class="text-gray-500 text-sm">Upvotes: {{ item.created_by.profile.upvotes }}</p>
                                         <p class="text-gray-500 text-sm">Downvotes: {{ item.created_by.profile.downvotes }}</p>
+
                                     </div>
                                 </div>
                             </a>
@@ -85,6 +93,14 @@
             {% else %}
                 <form method="POST" enctype="multipart/form-data" class="mt-4">
                     {% csrf_token %}
+                <!-- Add this section in your HTML to display error messages -->
+                    {% if messages %}
+                        <ul class="messages ml-3 mt-2" style="color: red;">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
 
                     <div class="mb-4 grid grid-cols-2 lg:grid-cols-1">
                         <p class="font-semibold">Upvotes: {{ user.profile.upvotes }}</p>

@@ -13,64 +13,68 @@ from django.core.paginator import Paginator, EmptyPage
 
 
 # Create your views here.
+
+# auds comment start here galaw
+
 @login_required
 def index_d(request):
     items = Item.objects.filter(created_by=request.user)
     users = User.objects.all()
     user_id = request.user.id
     items_per_page = 4  # ADJUST NALANG IF ILAN GUSTO NIYO
-
-    # Create a Paginator object
-    paginator = Paginator(items, items_per_page)
-
-    # Get the page number from the request's GET parameters
-    page = request.GET.get('page')
-
-    try:
-        # Attempt to convert the page parameter to an integer
-        page = int(page)
-        if page < 1:
-            # If the page is negative or zero, redirect sa first page
-            items = paginator.get_page(1)
-        else:
-            # Get the Page object for the requested page
-            items = paginator.get_page(page)
-    except (ValueError, TypeError):
-        # Handle non-integer or missing page parameter by showing the first page
-        items = paginator.get_page(1)
-    except EmptyPage:
-        # If the page is out of range, for example 1000, REDIRECT LAST PAGE
-        items = paginator.get_page(paginator.num_pages)  # LAST PAGE NA AVAIL
-
     users_per_page = 6  # ADJUST NALANG IF ILAN GUSTO NIYO
 
-    # Create a Paginator object
-    paginator = Paginator(users, users_per_page)
+    # Create a Paginator object for items
+    item_paginator = Paginator(items, items_per_page)
 
-    # Get the page number from the request's GET parameters
-    page = request.GET.get('page')
+    # Get the page number for items from the request's GET parameters
+    item_page = request.GET.get('item_page')
 
     try:
-        # Attempt to convert the page parameter to an integer
-        page = int(page)
-        if page < 1:
+        # Attempt to convert the item_page parameter to an integer
+        item_page = int(item_page)
+        if item_page < 1:
             # If the page is negative or zero, redirect sa first page
-            users = paginator.get_page(1)
+            items = item_paginator.get_page(1)
         else:
             # Get the Page object for the requested page
-            users = paginator.get_page(page)
+            items = item_paginator.get_page(item_page)
     except (ValueError, TypeError):
-        # Handle non-integer or missing page parameter by showing the first page
-        users = paginator.get_page(1)
+        # Handle non-integer or missing item_page parameter by showing the first page
+        items = item_paginator.get_page(1)
     except EmptyPage:
         # If the page is out of range, for example 1000, REDIRECT LAST PAGE
-        users = paginator.get_page(paginator.num_pages)  # LAST PAGE NA AVAIL
+        items = item_paginator.get_page(item_paginator.num_pages)  # LAST PAGE NA AVAIL
+
+    # Create a Paginator object for users
+    user_paginator = Paginator(users, users_per_page)
+
+    # Get the page number for users from the request's GET parameters
+    user_page = request.GET.get('user_page')
+
+    try:
+        # Attempt to convert the user_page parameter to an integer
+        user_page = int(user_page)
+        if user_page < 1:
+            # If the page is negative or zero, redirect sa first page
+            users = user_paginator.get_page(1)
+        else:
+            # Get the Page object for the requested page
+            users = user_paginator.get_page(user_page)
+    except (ValueError, TypeError):
+        # Handle non-integer or missing user_page parameter by showing the first page
+        users = user_paginator.get_page(1)
+    except EmptyPage:
+        # If the page is out of range, for example 1000, REDIRECT LAST PAGE
+        users = user_paginator.get_page(user_paginator.num_pages)  # LAST PAGE NA AVAIL
 
     return render(request, 'dashboard/index_d.html', {
         'items': items,
         'user_id': user_id,
         'users': users
     })
+
+# auds comment end here galaw
 
 
 def add_user(request):
