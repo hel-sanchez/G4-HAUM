@@ -1,5 +1,4 @@
 from django.contrib.auth.forms import UserChangeForm
-
 from profile.models import Profile
 
 

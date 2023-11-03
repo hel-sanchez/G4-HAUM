@@ -5,14 +5,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
-
 from item.forms import NewItemForm, EditItemForm, CategoryForm, addCategory, addLocation, LocationForm
 from item.models import Item, Category, PriceRange
 from profile.models import Location
 from django.core.paginator import Paginator, EmptyPage
 from django.contrib import messages
 
-# auds comment start here galaw
+
 def items(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -30,8 +29,6 @@ def items(request):
     price_ranges = PriceRange.objects.all()
 
     upvoted = request.GET.get('upvoted', False)
-    downvoted = request.GET.get('downvoted', False)
-    most_downvoted = request.GET.get('most_downvoted', False)
 
     # Annotate the items with upvote and downvote counts
     items = items.annotate(
@@ -91,9 +88,6 @@ def items(request):
         else:
             items = items.filter(price__gte=min_value, price__lte=max_value)
 
-    if not items.exists():
-        messages.error(request, "Item not found")
-
     else:
         return render(request, 'item/items.html', {
             'items': items,
@@ -109,7 +103,7 @@ def items(request):
         })
 
 
-    items_per_page = 15# ADJUST NALANG IF ILAN GUSTO NIYO
+    items_per_page = 24
 
     # Create a Paginator object
     paginator = Paginator(items, items_per_page)
@@ -131,8 +125,7 @@ def items(request):
         items = paginator.get_page(1)
     except EmptyPage:
         # If the page is out of range, for example 1000, REDIRECT LAST PAGE
-        items = paginator.get_page(paginator.num_pages)  # LAST PAGE NA AVAIL
-
+        items = paginator.get_page(paginator.num_pages)
     return render(request, 'item/items.html', {
         'items': items,
         'query': query,
@@ -145,7 +138,6 @@ def items(request):
         'test': category_ids,
         'test2': location_ids,
     })
-# auds comment end here galaw
 
 # Create your views here.
 def detail(request, pk):

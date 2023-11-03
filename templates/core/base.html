@@ -28,7 +28,7 @@
                         <ul class="space-y-2 lg:flex lg:space-x-6">
                             <li><a href="{% url 'item:new_item' %}"
                                    class="text-lg lg:text-base font-semibold text-white rounded-md block py-3 lg:p-3 lg:text-xl lg:mt-2"
-                                   style="background: {{ user.profile.color }}"><i class="fas fa-plus-circle"></i> Upload
+                                   style="background: {{ user.profile.color }}"><i class="fas fa-plus-circle"></i> Upload Item
                                 </a>
                             </li>
 
@@ -70,7 +70,7 @@
                     <li><a href="{% url 'about' %}" class="text-lg lg:text-base text-white hover:text-teal-700">About</a></li>
                     <li><a href="{% url 'contact' %}" class="text-lg lg:text-base text-white hover:text-teal-700">Contact</a></li>
                     <li><a href="{% static 'static_root/privacy_policy/PrivacyPolicy_HAUM.pdf' %}" class="text-lg lg:text-base text-white hover:text-teal-700" target="_blank">Privacy policy</a></li>
-                    <li><a href="{% static 'static_root/terms_of_use/TermsofUse_HAUMarketplace.pdf' %}" class="text-lg lg:text-base text-white hover:text-teal-700" target="_blank">Term of use</a></li>
+                    <li><a href="{% static 'static_root/terms_of_use/TermsofUse_HAUMarketplace.pdf' %}" class="text-lg lg:text-base text-white hover:text-teal-700" target="_blank">Terms of use</a></li>
                 </ul>
             </div>
         </footer>

@@ -1,10 +1,8 @@
 from django import forms
-
 from profile.models import Location
 from .models import Item, Category
 
 INPUT_CLASSES = 'w-full py-4 px-6 rounded-xl border-gray-950 border-2 focus:outline-none focus:border-gray-950'
-
 
 class NewItemForm(forms.ModelForm):
     class Meta:
@@ -20,10 +18,16 @@ class NewItemForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        price = cleaned_data.get('price')
         image = cleaned_data.get('image')
 
-        if not image:
+        if price is not None and price <= 0:
+            self.add_error('price', "Please input a valid price.")
+
+        if image is None:
             self.add_error('image', "Please upload an image.")
+
+        return cleaned_data
 
 
 class EditItemForm(forms.ModelForm):

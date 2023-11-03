@@ -1,10 +1,40 @@
 {% extends "core/base.html" %}
+
 {% block title %}Edit Category{% endblock title %}
+
 {% block content %}
-<h2>Edit Category</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Changes</button>
-</form>
+{#    <h2>Edit Category</h2>#}
+{#    <form method="post">#}
+{#        {% csrf_token %}#}
+{#        {{ form.as_p }}#}
+{#        <button type="submit">Save Changes</button>#}
+{#    </form>#}
+{#    #}
+
+     <div class="max-w-xl mx-auto bg-white p-5 rounded-lg shadow-lg">
+    <h1 class="text-3xl font-semibold mb-6 uppercase" style="text-align: center">Edit Location</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="space-y-4">
+            {{ form.as_p }}
+        </div>
+
+        <!-- Displaying Error Messages -->
+        {% if form.errors %}
+            <ul>
+                {% for field in form %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <button class="mt-6 py-3 px-6 text-lg hover:bg-red-900 rounded-lg text-white"
+                style="background:{{ user.profile.color }}">Save Changes
+        </button>
+
+
+    </form>
+</div>
 {% endblock %}

@@ -1,8 +1,5 @@
 from django.db import models
-from django.forms import TextInput
 from django.utils import timezone
-
-from dashboard import admin
 
 
 # Create your models here.

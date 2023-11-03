@@ -7,7 +7,6 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django_registration.forms import User
-
 from G4Marketplace import settings
 from item.models import Category, Item
 from .forms import SignupForm
@@ -15,18 +14,15 @@ from .models import Contact
 from .tokens import account_activation_token
 from verify_email.email_handler import send_verification_email
 from django.core.paginator import Paginator, EmptyPage
+from django.contrib import messages
 
 
-# Create your views here.
 def index(request):
     items = Item.objects.filter(is_sold=False)
     user_color = request.session.get('user_color', None)
     categories = Category.objects.all()
-    items_per_page = 4  # ADJUST NALANG IF ILAN GUSTO NIYO
-
-    # Create a Paginator object
+    items_per_page = 12
     paginator = Paginator(items, items_per_page)
-
     # Get the page number from the request's GET parameters
     page = request.GET.get('page')
 
@@ -67,6 +63,7 @@ def contact(request):
         comment = request.POST.get("comment")
         query = Contact(name=name, email=email, subject=subject, comment=comment)
         query.save()
+        messages.success(request, 'Thanks for reaching us. We will get back to you soon.')
         return redirect('/contact')
 
     return render(request, 'core/contact.html', {'contacts': contacts})
@@ -110,15 +107,6 @@ def send_email(request, subject, email, name):
 def about(request):
     return render(request, 'core/about.html')
 
-
-def terms_of_use(request):
-    return render(request, 'core/terms_of_use.html')
-
-
-def privacy_policy(request):
-    return render(request, 'core/privacy_policy.html')
-
-
 def signup(request):
     if request.user.is_authenticated: return redirect('index')
 
@@ -128,7 +116,6 @@ def signup(request):
             user = form.save()
             user.is_active = False
             user.save()
-
             # Send activation email
             send_verification_email(request, form)
             return redirect('request_new_activation_link')
@@ -142,7 +129,7 @@ def signup(request):
 def activate(request, uidb64, token):
     User = get_user_model()
     try:
-        uid = uidb64  # No need for decoding here
+        uid = uidb64
         user = User.objects.get(pk=uid)
     except (User.DoesNotExist, ValueError):
         user = None
@@ -163,7 +150,7 @@ def send_activation_email(request, user):
     message = render_to_string('core/acc_active_email.html', {
         'user': user,
         'domain': current_site.domain,
-        'uid': user.pk,  # No need for encoding here
+        'uid': user.pk,
         'token': account_activation_token.make_token(user),
         'protocol': 'https' if request.is_secure() else 'http',
     })
@@ -205,5 +192,4 @@ def login_required_redirect(function):
         else:
             return function(request, *args, **kwargs)
     return wrap
-
 

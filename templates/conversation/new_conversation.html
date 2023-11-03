@@ -1,10 +1,14 @@
 {% extends 'core/base.html' %}
 
-{% block title %}New Conversation{% endblock title %}
+{% block title %}
+    New Conversation
+{% endblock title %}
 
 {% block content %}
     <div class="p-5 bg-black-300 shadow-xl rounded-lg lg:p-10">
-        <h1 class="mb-4 text-3xl text-center uppercase font-bold">New Conversation</h1>
+        <h1 class="mb-4 text-3xl text-center uppercase font-bold">
+            New Conversation
+        </h1>
         <form action="." method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
             {% csrf_token %}
             <div class="space-y-4 border border-black rounded-xl shadow-lg p-4 lg:p-6">
@@ -20,8 +24,9 @@
                     {{ form.non_field_errors }}
                 </div>
             {% endif %}
-            <button type="submit" class="text-lg bg-red-800 text-white px-4 py-2 rounded-xl block w-full mt-4"
-            style="background: {{ user.profile.color }}">Send</button>
+            <button type="submit" class="text-lg bg-red-800 text-white px-4 py-2 rounded-xl block w-full mt-4" style="background: {{ user.profile.color }}">
+                Send
+            </button>
         </form>
     </div>
 {% endblock content %}

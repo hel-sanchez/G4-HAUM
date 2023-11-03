@@ -3,6 +3,12 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+    {% for message in messages %}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ message }}</span>
+        </div>
+    {% endfor %}
+
     <div class="p-5">
         <div class="flex items-center">
             <img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
@@ -34,14 +40,16 @@
                         <span class="ml-2 text-sm">{{ profile.downvotes }} Downvotes</span>
                     </form>
                 </div>
-                    <!-- Add this section in your HTML to display error messages -->
-                    {% if messages %}
-                        <ul class="messages ml-3 mt-2" style="color: red;">
-                            {% for message in messages %}
-                                <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+
+                <!-- Display error messages -->
+                {% if messages %}
+                    <ul class="messages ml-3 mt-2" style="color: red;">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
                 <div class="bg-gray-100 p-4 rounded-lg shadow-lg border border-gray-300">
                     <legend class="text-xl font-bold mb-3 text-gray-700">Profile Info</legend>
                     <div class="text-gray-700">
@@ -82,25 +90,15 @@
                                         <p class="text-gray-500 text-sm">Location: {{ item.created_by.profile.location.name }}</p>
                                         <p class="text-gray-500 text-sm">Upvotes: {{ item.created_by.profile.upvotes }}</p>
                                         <p class="text-gray-500 text-sm">Downvotes: {{ item.created_by.profile.downvotes }}</p>
-
                                     </div>
                                 </div>
                             </a>
                         {% endfor %}
                     </div>
                 {% endif %}
-
             {% else %}
                 <form method="POST" enctype="multipart/form-data" class="mt-4">
                     {% csrf_token %}
-                <!-- Add this section in your HTML to display error messages -->
-                    {% if messages %}
-                        <ul class="messages ml-3 mt-2" style="color: red;">
-                            {% for message in messages %}
-                                <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
 
                     <div class="mb-4 grid grid-cols-2 lg:grid-cols-1">
                         <p class="font-semibold">Upvotes: {{ user.profile.upvotes }}</p>
@@ -117,14 +115,14 @@
                     <div class="mb-4 w-1/2">
                         <label for="{{ u_form.first_name.id_for_label }}" class="block text-gray-600 font-medium">First Name:</label>
                         <input type="text" id="first_name" name="first_name"
-                               class="border border-gray-300 p-2 rounded w-70 lg:w-full" required value="{{ user.first_name }}"
+                               class="border border-gray-300 p-2 rounded w-70 lg:w-full" required value="{{ user.profile.first_name }}"
                                placeholder="First Name">
                     </div>
 
                     <div class="mb-4 w-1/2">
                         <label for="{{ u_form.last_name.id_for_label }}" class="block text-gray-600 font-medium">Last Name:</label>
                         <input type="text" id="last_name" name="last_name"
-                               class="border border-gray-300 p-2 rounded w-70 lg:w-full" required value="{{ user.last_name }}"
+                               class="border border-gray-300 p-2 rounded w-70 lg:w-full" required value="{{ user.profile.last_name }}"
                                placeholder="Last Name">
                     </div>
 
@@ -141,20 +139,14 @@
                     </div>
 
                     <div class="mb-4 w-1/2">
-                        <label for="{{ p_form.profile.bio.id_for_label }}" class="block text-gray-600 font-medium">Bio:</label>
-                        <textarea id="bio" name="bio"
-                                  class="border border-gray-300 p-2 rounded w-70 lg:w-full" required rows="6"
-                                  placeholder="Add a Bio">{{ user.profile.bio }}</textarea>
-                    </div>
-
-                    <div class="mb-4 w-1/2">
-                        <label for="{{ form.color.id_for_label }}">Choose a color:</label>
-                        <input type="color" id="color" name="color" class="border border-black" value="{{ user.profile.color }}">
-                    </div>
+                            <label for="{{ form.color.id_for_label }}">Choose a color:</label>
+                            <input type="color" id="color" name="color" class="border border-black" value="{{ user.profile.color }}">
+                        </div>
 
                     <div class="mb-4 w-1/2">
                         {{ form.as_table }}
                     </div>
+
 
                     <div class="mb-4 w-1/2 lg:grid-cols-2">
                         <label for="{{ p_form.image.id_for_label }}" class="block text-gray-800 font-medium lg:mb-1">Profile Image:
@@ -170,13 +162,37 @@
                         </button>
                     </div>
 
-                    <div class="mt-10 bg-black-200 p-8 rounded-xl shadow-xl">
-                        <label class="font-bold text-xl uppercase">Login History:</label><br>
-                            {% for foo in login_history %}
-                                {{ foo.date_time }}<br>
-                                {{ foo.ip }}
-                                {{ foo.user_agent }}<br>
-                            {% endfor %}
+                    <div class="mt-10 bg-white p-10 rounded-xl shadow-xl" style="max-height: 300px; overflow-y: auto">
+                        <label class="font-bold text-xl uppercase">Login History:</label><br><br>
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Date Time
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        User Agent
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                {% for foo in login_history %}
+                                    <tr>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                            {{ foo.date_time }}
+                                        </td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                            {{ foo.user_agent }}
+                                        </td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
+                                            <a href="{% url 'contact' %}" class="text-red-600 hover:text-red-900">Report</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </form>
             {% endif %}
@@ -184,7 +200,7 @@
     </div>
 {% endblock content %}
 
-{#JavaScript code to handle color selection#}
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const submitButton = document.getElementById('submit-button');

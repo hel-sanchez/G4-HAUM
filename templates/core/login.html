@@ -9,17 +9,15 @@
         <h1 class="mb-6 text-3xl ml-2 font-semibold">LOG IN</h1>
 
         {% if request.method == "POST" %}
-            {% if not user.is_authenticated %}
+            {% if not user.email.is_active %}
                 <div class="mb-3 p-4 bg-red-200 rounded-xl text-sm text-red-900">
-                    Your account is not yet activated. Please check your email for the activation link or
-                    <a href="{% url 'request_new_activation_link' %}" class="hover:underline">request a new activation link</a>.
+                    Invalid credentials. Please check your inbox or junk folder for the activation link,
+                    or double-check your credentials.
+
                 </div>
             {% else %}
-                <div class="mb-3 p-4 bg-red-100 rounded-xl text-sm text-red-900">
-                    Invalid username or password. Please try again.
-                </div>
-            {% endif %}
         {% endif %}
+    {% endif %}
 
         <form method="post" action=".">
             {% csrf_token %}

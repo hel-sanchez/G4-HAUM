@@ -31,13 +31,6 @@ class ProfileUpdateForm(forms.ModelForm):
         return profile
 
 
-#Color Preference Form can be deleted since the color field is already in the ProfileUpdateForm
-class ColorPreferenceForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['color']
-
-
 class FontPreferenceForm(forms.ModelForm):
     FONT_CHOICES = (
         ('Default', 'Default'),

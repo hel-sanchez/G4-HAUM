@@ -2,34 +2,26 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
-
 from core.forms import SignupForm
 from dashboard.forms import EditUserForm
 from item.models import Item
 from profile.forms import UserUpdateForm
 from profile.models import Profile
-
 from django.core.paginator import Paginator, EmptyPage
 
 
-# Create your views here.
-
-# auds comment start here galaw
 
 @login_required
 def index_d(request):
     items = Item.objects.filter(created_by=request.user)
     users = User.objects.all()
     user_id = request.user.id
-    items_per_page = 4  # ADJUST NALANG IF ILAN GUSTO NIYO
-    users_per_page = 6  # ADJUST NALANG IF ILAN GUSTO NIYO
-
+    items_per_page = 8
+    users_per_page = 6
     # Create a Paginator object for items
     item_paginator = Paginator(items, items_per_page)
-
     # Get the page number for items from the request's GET parameters
     item_page = request.GET.get('item_page')
-
     try:
         # Attempt to convert the item_page parameter to an integer
         item_page = int(item_page)
@@ -45,10 +37,8 @@ def index_d(request):
     except EmptyPage:
         # If the page is out of range, for example 1000, REDIRECT LAST PAGE
         items = item_paginator.get_page(item_paginator.num_pages)  # LAST PAGE NA AVAIL
-
     # Create a Paginator object for users
     user_paginator = Paginator(users, users_per_page)
-
     # Get the page number for users from the request's GET parameters
     user_page = request.GET.get('user_page')
 
@@ -73,8 +63,6 @@ def index_d(request):
         'user_id': user_id,
         'users': users
     })
-
-# auds comment end here galaw
 
 
 def add_user(request):
