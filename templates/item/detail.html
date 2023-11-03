@@ -17,7 +17,7 @@
                              style="border: 2px solid {{ item.created_by.profile.color }}">
                         <h1 class="text-2xl lg:text-3xl font-bold ml-2">{{ item.name }}</h1>
                     </a>
-                    <div class="user-tooltip hidden lg:absolute bg-white p-3 rounded-lg shadow-md border border-gray-300 text-sm ml-4">
+                    <div class="user-tooltip lg:absolute bg-white p-3 rounded-lg shadow-md border border-gray-300 text-sm ml-4">
                         <p class="text-sm"><strong>{{ item.created_by.username }}</strong></p>
                         <p class="text-sm">
                             <strong>{{ item.created_by.profile.first_name }} {{ item.created_by.profile.last_name }}</strong>
@@ -86,40 +86,6 @@
             </div>
         </div>
     </div>
-
-    <style>
-        .button-edit,
-        .button-delete,
-        .button-contact-seller {
-            display: block;
-            margin-top: 10px;
-            padding: 8px 16px;
-            text-align: center;
-            border-radius: 5px;
-            color: #fff;
-        }
-
-        .button-edit {
-            background-color: #2ca02c; /* Green */
-        }
-
-        .button-delete {
-            background-color: #d9534f; /* Red */
-        }
-
-        .button-contact-seller {
-            background-color: #337ab7; /* Blue */
-        }
-
-        /* Additional styling for mobile responsiveness */
-        @media (max-width: 768px) {
-            .button-edit,
-            .button-delete,
-            .button-contact-seller {
-                width: 100%;
-            }
-        }
-    </style>
 
         <style>
         .profile-container {

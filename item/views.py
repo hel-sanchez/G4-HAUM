@@ -20,7 +20,7 @@ def items(request):
     category_ids = request.GET.getlist('categories')  # Get a list of selected category IDs
     location_ids = request.GET.getlist('locations')  # Get a list of selected location IDs
     price_range_ids = request.GET.getlist('price_ranges')  # Get a list of selected price range IDs
-    min_price = request.GET.get('min_price', 0)
+    min_price = request.GET.get('min_price', '')
     max_price = request.GET.get('max_price', float('inf'))
 
     category = Category.objects.all()

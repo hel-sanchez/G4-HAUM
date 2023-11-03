@@ -138,6 +138,9 @@
                                     <p class="text-gray-500 text-sm">Location: {{ item.created_by.profile.location.name }}</p>
                                     <p class="text-gray-500 text-sm">Upvotes: {{ item.created_by.profile.upvotes }}</p>
                                     <p class="text-gray-500 text-sm">Downvotes: {{ item.created_by.profile.downvotes }}</p>
+                                    {% if item.description %}
+                                        <p class="text-gray-500 text-sm">Description:{{ item.description }}</p>
+                                    {% endif %}
                                 </div>
                             </div>
                         </a>
